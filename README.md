@@ -1,1 +1,4 @@
 # minesweeper_auto_solving
+マインスイーパが遊べる自作プログラムmod_MyClass.pyと，
+自動でマインスイーパを解き，手詰まりになった場合は各ブロックの爆弾確率を計算するプログラムmain.pyです．
+
