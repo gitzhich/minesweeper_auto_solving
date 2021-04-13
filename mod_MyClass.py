@@ -142,7 +142,6 @@ class MyCells:
                 self.setMines(x, y)    # 最初にあけるブロックの周囲には爆弾は無い
                 self.setting = True
             if (not self.map[y][x].info['flag']) and (self.map[y][x].info['block']):
-                #aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                 self.openBlock(x, y)
         self.checkClear()
     
@@ -175,7 +174,7 @@ class MyCells:
                     line += info_map[y][x]
                 f.write(line + '\n')
     
-    def showMap(self, gameoverflag):
+    def showMap(self):
         line = '　　'
         for x in range(self.width):
             line += MyCells.num_table[str((x+1) % 10)]
@@ -186,7 +185,7 @@ class MyCells:
             for x in range(self.width):
                 if self.map[y][x].info['flag']:
                     line += 'Ｆ'
-                elif self.map[y][x].info['block'] and (not (gameoverflag and self.map[y][x].info['mine'])):
+                elif self.map[y][x].info['block'] and (not (self.explosion and self.map[y][x].info['mine'])):
                     line += '■'
                 elif self.map[y][x].info['mine']:
                     line += '※'
@@ -221,7 +220,7 @@ class MyCells:
         [x, y, m] = self.getSize()
         self.resetMap(x, y, m)
         while True:
-            self.showMap(False)
+            self.showMap()
             print('(x, y[, f])')
             print(':', end='')
             line = input()
@@ -232,11 +231,11 @@ class MyCells:
             if (line == 'end'): break
             self.doCommand(line)
             if self.explosion:
-                self.showMap(True)
+                self.showMap()
                 print('Game Over')
                 break
             elif self.clear:
-                self.showMap(False)
+                self.showMap()
                 print('Game Clear')
                 break
 

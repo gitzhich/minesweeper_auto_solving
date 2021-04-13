@@ -338,9 +338,10 @@ if __name__ == "__main__":
     # myGame.playGame()
     comGame = MySolve()
     
-    #[x, y, m] = myGame.getSize()
+    [x, y, m] = myGame.getSize()
     myGame.resetMap(x, y, m)
     comGame.resetMap(x, y, m)
+    showmode = int(input('display mode:'))
     if showmode >= 0:
         subprocess.call("clear")
         print('')
