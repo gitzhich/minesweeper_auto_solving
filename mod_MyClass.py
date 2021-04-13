@@ -2,6 +2,10 @@
 
 import random
 
+_EASY = (9, 9, 10)
+_NORMAL = (16, 16, 40)
+_HARD = (30, 16, 99)
+
 class MyBox:
     def __init__(self):
         self.info = {'flag': False, 'block': False, 'mine': False, 'around': 0}
@@ -171,7 +175,7 @@ class MyCells:
                     line += info_map[y][x]
                 f.write(line + '\n')
     
-    def showMap(self):
+    def showMap(self, gameoverflag):
         line = '　　'
         for x in range(self.width):
             line += MyCells.num_table[str((x+1) % 10)]
@@ -182,7 +186,7 @@ class MyCells:
             for x in range(self.width):
                 if self.map[y][x].info['flag']:
                     line += 'Ｆ'
-                elif self.map[y][x].info['block']:
+                elif self.map[y][x].info['block'] and (not (gameoverflag and self.map[y][x].info['mine'])):
                     line += '■'
                 elif self.map[y][x].info['mine']:
                     line += '※'
@@ -195,19 +199,29 @@ class MyCells:
         self.insertLine()
     
     def getSize(self):
-        print('WIDTH:',end='')
-        x = int(input())
-        print('HEIGHT:', end='')
-        y = int(input())
-        print('How many mines?:', end='')
-        m = int(input())
-        return x, y, m
+        while True:
+            print('Easy: 1, Normal: 2, Hard: 3, Custom: 4')
+            mode = input(':')
+            if (mode == '1'):
+                return list(_EASY)
+            elif (mode == '2'):
+                return list(_NORMAL)
+            elif (mode == '3'):
+                return list(_HARD)
+            elif (mode == '4'):
+                print('WIDTH:',end='')
+                x = int(input())
+                print('HEIGHT:', end='')
+                y = int(input())
+                print('How many mines?:', end='')
+                m = int(input())
+                return x, y, m
     
     def playGame(self):
         [x, y, m] = self.getSize()
         self.resetMap(x, y, m)
         while True:
-            self.showMap()
+            self.showMap(False)
             print('(x, y[, f])')
             print(':', end='')
             line = input()
@@ -218,11 +232,11 @@ class MyCells:
             if (line == 'end'): break
             self.doCommand(line)
             if self.explosion:
-                self.showMap()
+                self.showMap(True)
                 print('Game Over')
                 break
             elif self.clear:
-                self.showMap()
+                self.showMap(False)
                 print('Game Clear')
                 break
 
